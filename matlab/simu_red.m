@@ -19,8 +19,7 @@ kp = kp_1;
 Z = Z_1;
 P = P_1;
 
-thetas_1 = [kp P(2) P(3)]';
-B = [0 kp]';
+thetas = thetas_1;
 
 
 N = N_1;
@@ -61,8 +60,7 @@ e0_1 =  y_1 - r_1;
 % Z = Z_1;
 % P = P_1;
 % 
-% thetas = [kp P(2) P(3)]';
-% B = [0 kp]';
+% thetas = thetas_1;
 % 
 % 
 % N = N_2;
@@ -104,8 +102,7 @@ e0_1 =  y_1 - r_1;
 % Z = Z_2;
 % P = P_2;
 % 
-% thetas_2 = [kp P(2) P(3)]';
-% B = [0 kp]';
+% thetas = thetas_2;
 % 
 % 
 % N = N_2;
@@ -148,8 +145,7 @@ e0_1 =  y_1 - r_1;
 % Z = Z_1;
 % P = P_1;
 % 
-% thetas_2 = [kp P(2) P(3)]';
-% B = [0 kp]';
+% thetas = thetas_1;
 % 
 % 
 % N = N_2;
@@ -192,8 +188,7 @@ kp = kp_1;
 Z = Z_1;
 P = P_1;
 
-thetas_2 = [kp P(2) P(3)]';
-B = [0 kp]';
+thetas = thetas_1;
 
 
 N = N_2;

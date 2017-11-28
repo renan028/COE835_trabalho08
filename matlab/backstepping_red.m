@@ -68,7 +68,7 @@ dlambda = N*lambda + u;
 
 
 %% Planta
-F = [B*u Phi];
+F = [[0 1]'*u Phi];
 dy = A*y + F*thetas;
 
 %% Translation
