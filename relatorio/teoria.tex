@@ -268,12 +268,12 @@ Derivando $z_2$, obtemos:
 \begin{align}
 \dot{z}_2 &= \dot{v} - \hat{\rho}\ddot{y}_r - \dot{\hat{\rho}}\dot{y}_r -
 \dot{\alpha}_1 \\
-&= u - Nv - \hat{\rho}\ddot{y}_r - \beta -
-\frac{\partial\alpha_1}{\partial y}(\omega^\intercal\tilde{\omega} + \epsilon_2)
+&= Nv + u - \hat{\rho}\ddot{y}_r - \beta -
+\frac{\partial\alpha_1}{\partial y}(\omega^\intercal\tilde{\theta} + \epsilon_2)
 - \frac{\partial\alpha_1}{\partial\hat{\theta}}\dot{\hat{\theta}} \\
-\beta &= Nv + \frac{\partial\alpha_1}{\partial y}(\xi +
+\beta &= \frac{\partial\alpha_1}{\partial y}(\xi +
 \omega^\intercal\hat{\theta} - Ny) + \frac{\partial \alpha_1}{\partial \eta}
-(A_0\eta + e_2y) + \frac{\partial \alpha_1}{\partial y_r} \dot{y}_r +
+(N\eta + y) + \frac{\partial \alpha_1}{\partial \dot{y}_r} \dot{y}_r +
 (\dot{y}_r + \frac{\partial \alpha_1}{\partial \hat{\rho}})\dot{\hat{\rho}}
 \end{align}
 
@@ -289,7 +289,7 @@ V_2 = V_1 + \frac{1}{2}z_2^2 + \frac{1}{4d_2}\epsilon^\intercal P\epsilon
 \hat{\theta} &= \Gamma\tau_2 \\
 \tau_1 &= (\omega - \hat{\rho}(\dot{y}_r + \bar{\alpha}_1)e_1)z_1 \\
 \tau_2 &= \tau_1 - z_2 \frac{\partial \alpha_1}{\partial y} \omega \\
-u &= -c_2z_2 + \beta + \hat{\rho}\ddot{y}_r + \frac{\partial \alpha_1}{\partial
-\hat{\theta}}\hat{\theta} - d_2z_2\left( \frac{\partial \alpha_1}{\partial
+u &= -Nv -c_2z_2 + \beta + \hat{\rho}\ddot{y}_r + \frac{\partial
+\alpha_1}{\partial \hat{\theta}}\hat{\theta} - d_2z_2\left( \frac{\partial \alpha_1}{\partial
 y}\right)^2 - \hat{k}_pz_1
 \end{align}

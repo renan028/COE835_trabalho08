@@ -11,12 +11,15 @@ Temos ainda que $\alpha =
 \hat{\rho}(-c_1z_1-d_1d_1-\xi-\bar{\omega}^\intercal\hat{\theta})$. Logo:
 \begin{align}
 \frac{\partial \alpha_1}{\partial y} &= -\hat{\rho}(c_1 + d_1) +
-\hat{\rho}e_2^\intercal\hat{\theta} + N\\
-\frac{\partial \alpha_1}{\partial \eta} &= e_2^\intercal N^2 \hat{\rho} \\
+\hat{\rho}e_2^\intercal\hat{\theta} + \hat{\rho} N\\
+\frac{\partial \alpha_1}{\partial \eta}\frac{\text{d}\eta}{\text{d}t} &=
+\hat{\rho}\left(N^2\frac{\text{d}\eta}{\text{d}t} +
+\left[0 \quad N\frac{\text{d}\eta}{\text{d}t}
+\quad \frac{\text{d}\eta}{\text{d}t}\right]\hat{\theta}\right) \\
 \frac{\partial \alpha_1}{\partial y_r} &= \hat{\rho}(c_1 + d_1)\\
-\frac{\partial \alpha_1}{\partial \hat{\theta}} &= - \rho\bar{\omega} \\
+\frac{\partial \alpha_1}{\partial \hat{\theta}} &= - \hat{\rho}\bar{\omega} \\
 \frac{\partial \alpha_1}{\partial \hat{\rho}} &= -(c_1+d_1)(y-y_r) +
-e_2^\intercal N\eta -\bar{\omega}^\intercal \hat{\theta} + Ny
+N^2\eta -\bar{\omega}^\intercal \hat{\theta} + Ny
 \end{align}
  
 \lstinputlisting[style=myMatlab]{../matlab/backstepping_red.m} 
