@@ -214,14 +214,82 @@ Derivando a equação \ref{eq:xi}, obtemos:
 &= N(-N^2\eta - y) = N\xi - N^2y 
 \end{align*}
 
-E assim chegamos na equação \ref{eq:filtros3}. Podemos reescrever a dinâmica da
-saída $y$:
+E assim chegamos na equação \ref{eq:filtros3}. O projeto backstepping agora
+segue como no trabalho anterior. Primeiro, fazemos a mudança de coordenadas em
+\textbf{z}:
 
 \begin{align}
-\dot{y} &= x_2 + \phi^\intercal\theta\\
-\nonumber &= k_pv_{0,2} + \xi_2 + \bar{\omega}^\intercal\theta + \epsilon_2 \\
-\nonumber \bar{\omega}^\intercal &= 
-\begin{bmatrix}
-0 & (\Xi_2+\phi_1^\intercal)
-\end{bmatrix}
+z_1 &= y - y_r \\
+\nonumber z_2 &= v_0 - \alpha_{1} - \hat{\rho}\dot{y_r}
+\end{align}
+
+onde $\rho$ é estimativa de $\frac{1}{k_p}$. O controle virtual $\alpha_1$, a
+lei de controle $u$ e as leis de adaptação $\dot{\theta}$ e $\dot{\rho}$ são
+obtidas pelo método de Lyapunov. Derivando $z_1$, obtemos:
+
+\begin{align}
+\dot{z}_1 &= k_p\alpha_1 + \xi + \bar{\omega}^\intercal\theta + \epsilon -
+k_p\tilde{\rho}\dot{y}_r + k_pz_2 - Ny \\
+\alpha_1 &= \hat{\rho}\bar{\alpha}_1\\
+\dot{z}_1 &= \bar{\alpha}_1 + \xi_2 + \bar{\omega}^\intercal\theta + \epsilon_2
+- k_p(\dot{y}_r + \bar{\alpha}_1)\tilde{\rho} + k_pz_2 - Ny
+\end{align}
+
+E escolhemos a primeira função estabilizante:
+\begin{align}
+\bar{\alpha}_1 = -c_1z_1-d_1z_1-\xi_2-\bar{\omega}^\intercal\hat{\theta} + Ny
+\end{align}
+
+A dinâmica de $z_1$ pode ser reescrita como:
+\begin{align}
+\dot{z}_1 =
+-c_1z_1-d_1z_1+\epsilon_2+\left[\omega-\hat{\rho}(\dot{y}_r
++ \bar{\alpha}_1)e_1\right]^\intercal\tilde{\theta} -
+k_p(\dot{y}_r+\bar{\alpha}_1)\tilde{\rho} + \hat{k}_pz_2
+\end{align}
+
+Escolhe-se a função de Lyapunov:
+
+\begin{align}
+2V_1 = z_1^2 +
+\tilde{\theta}^\intercal\Gamma^{-1}\tilde{\theta}+|k_p|\gamma^{-1}\tilde{\rho}^2
++ \frac{1}{2d_1}\epsilon^\intercal P\epsilon
+\end{align}
+
+Nessas condições, é possível que a atualização de $\hat{\rho}$ é dada pela
+equação:
+
+\begin{align}
+\hat{\rho} &= -\gamma z_1 \text{sign}(k_p)(\dot{y}_r + \bar{\alpha}_1)
+\end{align}
+
+Derivando $z_2$, obtemos:
+
+\begin{align}
+\dot{z}_2 &= \dot{v} - \hat{\rho}\ddot{y}_r - \dot{\hat{\rho}}\dot{y}_r -
+\dot{\alpha}_1 \\
+&= u - Nv - \hat{\rho}\ddot{y}_r - \beta -
+\frac{\partial\alpha_1}{\partial y}(\omega^\intercal\tilde{\omega} + \epsilon_2)
+- \frac{\partial\alpha_1}{\partial\hat{\theta}}\dot{\hat{\theta}} \\
+\beta &= Nv + \frac{\partial\alpha_1}{\partial y}(\xi +
+\omega^\intercal\hat{\theta} - Ny) + \frac{\partial \alpha_1}{\partial \eta}
+(A_0\eta + e_2y) + \frac{\partial \alpha_1}{\partial y_r} \dot{y}_r +
+(\dot{y}_r + \frac{\partial \alpha_1}{\partial \hat{\rho}})\dot{\hat{\rho}}
+\end{align}
+
+Escolhe-se a função de Lyapunov:
+
+\begin{align}
+V_2 = V_1 + \frac{1}{2}z_2^2 + \frac{1}{4d_2}\epsilon^\intercal P\epsilon
+\end{align}
+
+É possível mostrar que a atualização de parâmetros e a lei de controle são:
+
+\begin{align}
+\hat{\theta} &= \Gamma\tau_2 \\
+\tau_1 &= (\omega - \hat{\rho}(\dot{y}_r + \bar{\alpha}_1)e_1)z_1 \\
+\tau_2 &= \tau_1 - z_2 \frac{\partial \alpha_1}{\partial y} \omega \\
+u &= -c_2z_2 + \beta + \hat{\rho}\ddot{y}_r + \frac{\partial \alpha_1}{\partial
+\hat{\theta}}\hat{\theta} - d_2z_2\left( \frac{\partial \alpha_1}{\partial
+y}\right)^2 - \hat{k}_pz_1
 \end{align}

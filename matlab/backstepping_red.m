@@ -2,7 +2,7 @@
 %
 %  COE-835  Controle adaptativo
 %
-%  Script para simular o trabalho 7
+%  Script para simular o trabalho 8
 %
 %  Backstepping  :  n  = 2     Second and third order plant
 %                   n* = 2     Relative degree
@@ -36,7 +36,7 @@ omega = [v1, (Xi - y(1)*e1')]';
 
 %% Z
 z1 = y(1) - yr;
-alpha_bar = -c1*z1 - d1*z1 - xi - omega_bar'*theta;
+alpha_bar = -c1*z1 - d1*z1 - xi - omega_bar'*theta + N*y(1);
 alpha_1 = rho * alpha_bar;
 z2 = v1 - rho*dyr - alpha_1;
 
@@ -44,11 +44,11 @@ z2 = v1 - rho*dyr - alpha_1;
 deta = N*eta + y(1);
 
 %% dalpha/dt
-dady = rho * (- c1 - d1 + [0,e1']*theta); 
+dady = rho * (- c1 - d1 + [0,e1']*theta + N); 
 dadeta_deta = rho * (N^2 * deta + [0, N*deta, deta]*theta);
 dadyr = rho*(c1 + d1);
 dadtheta = - rho * omega_bar';
-dadrho = -(c1 + d1)*(y(1) - yr) - xi - omega_bar'*theta;
+dadrho = -(c1 + d1)*(y(1) - yr) - xi - omega_bar'*theta + N*y(1);
 
 
 %% Variables 2
@@ -58,7 +58,7 @@ tau_2 = tau_1 - z2 * (dady * omega);
 %% Atualização dos parâmetros
 dtheta = Gamma * tau_2;
 drho = - gamma * z1 * sign(kp) * (dyr + alpha_bar);
-beta = N*v1 + dady * (xi + omega'*theta) + ...
+beta = N*v1 + dady * (xi + omega'*theta - N*y(1)) + ...
     dadeta_deta + dadyr * dyr + (dyr + dadrho) * drho;
 u = -c2*z2 + beta + rho*ddyr + dadtheta*dtheta - d2*z2*(dady)^2 - ...
     theta(1)*z1;
