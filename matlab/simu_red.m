@@ -192,7 +192,7 @@ thetas = thetas_1;
 
 
 N = N_2;
-A0 = A - k*e1';
+% A0 = A - k*e1';
 
 a = a_1;
 w = w_1;

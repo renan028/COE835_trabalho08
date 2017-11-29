@@ -2,13 +2,12 @@
 \section{Backstepping - Observador de ordem reduzida}
 
 Este trabalho visa complementar o trabalho 7, modificando o observador completo
-por um observador de ordem reduzida, também chamado de observador de Luenberger.
+por um observador de ordem reduzida, também chamado de \textit{observador de Luenberger}.
 A formulação teórica passa pela ideia geral de um observador de ordem reduzida,
-exemplifica para o caso do sistema de segunda ordem deste trabalho e, por
-último, desenvolvemos o algoritmo backstepping para este observador e caso
-$n=2$, $n^*=2$.
+exemplifica para o caso do sistema de segunda ordem deste trabalho ($n=2$, $n^*=2$) e, por último, desenvolvemos o algoritmo backstepping para este observador.
 
 Considere uma planta descrita pelo seguinte sistema em espaço de estados:
+%
 \begin{align}
 \dot{x} &= Ax + Bu\\
 \nonumber y &= Cx
@@ -16,24 +15,23 @@ Considere uma planta descrita pelo seguinte sistema em espaço de estados:
 \end{align}
 
 Suponha que os primeiros $m$ estados podem ser obtidos diretamente pela medida
-da saída do sistema, ou seja, o sistema pode ser paticioando:
-
+da saída do sistema, ou seja, o sistema pode ser paticionado em:
+%
 \begin{align}
 \dot{x}_1 &= A_{11}x_1 + A_{12}x_2 + B_1u \\
 \nonumber \dot{x}_2 &= A_{21}x_1 + A_{22}x_2 + B_2u \\
-\nonumber y &= C_1x_1
-\end{align}
+\nonumber y &= C_1x_1 \,,
+\end{align}%
 
-e $x_1 = C_1^{-1}y$. Um observador de ordem reduzida pode ser usado para estimar
-os $x_2 \in \mathbb{R}^{n-m}$ estados faltantes. Define-se:
-
+com $x_1 = C_1^{-1}y, \, x_1 \in \mathbb{R}^m$. Um observador de ordem reduzida pode ser usado para estimar os estados $x_2 \in \mathbb{R}^{n-m}$ faltantes. Define-se:
+%
 \begin{align}
 \chi = x_2 + Ny
 \label{eq:csi}
 \end{align}
 
 Pode-se demonstrar que a dinâmica de $\chi$ é descrita como:
-
+%
 \begin{align}
 \chi &= Q\chi + Ry + Su \\
 \nonumber Q &= A_{22} + NC_1A_{12}\\
@@ -41,145 +39,129 @@ Pode-se demonstrar que a dinâmica de $\chi$ é descrita como:
 \nonumber S &= B_2 + NC_1B_1
 \end{align}
 
-Derivando a equação~\ref{eq:csi}, obtemos:
-
+Para verificar, derivamos a equação \eqref{eq:csi} e obtemos:
+%
 \begin{align}
-\dot{\chi} &= \dot{x}_2 + NC_1\dot{x}_1 \\
-\nonumber &= (A_{21}x_1 + A_{22}x_2 + B_2u) + NC_1(A_{11}x_1 + A_{12}x_2 +
+\dot{\chi} =& \dot{x}_2 + NC_1\dot{x}_1 \\
+\nonumber =& (A_{21}x_1 + A_{22}x_2 + B_2u) + NC_1(A_{11}x_1 + A_{12}x_2 +
 B_1u)\\
-\nonumber &= (A_{22} + NC_1A_{12})x_2 + (A_{21}+NC_1A_{11})x_1 + (B_2+NC_1B_1)u
+\nonumber =& (A_{22} + NC_1A_{12})x_2 + (A_{21}+NC_1A_{11})x_1 + (B_2+NC_1B_1)u
 \\
-\nonumber &= (A_{22} + NC_1A_{12})x_2 + (A_{22}+NC_1A_{12})Ny -
-(A_{22}+NC_1A_{12})Ny + (A_{21}+NC_1A_{11})x_1 + (B_2+NC_1B_1)u \\
-\nonumber &= (A_{22} + NC_1A_{12})(x_2+Ny) - (A_{22}+NC_1A_{12})Ny +
+\nonumber =& (A_{22} + NC_1A_{12})x_2 + (A_{22}+NC_1A_{12})Ny -
+(A_{22}+NC_1A_{12})Ny + (A_{21}+NC_1A_{11})x_1 + \cdots \\
+ & \cdots + (B_2+NC_1B_1)u & \nonumber \\
+\nonumber =& (A_{22} + NC_1A_{12})(x_2+Ny) - (A_{22}+NC_1A_{12})Ny +
 (A_{21}+NC_1A_{11})C_1^{-1}y + (B_2+NC_1B_1)u \\
-\nonumber &= Q\chi + \left[-QN + (A_{21}+NC_1A_{11})C_1^{-1}\right]y +
+\nonumber =& Q\chi + \left[-QN + (A_{21}+NC_1A_{11})C_1^{-1}\right]y +
 Su\\
-\nonumber &= Q\chi + Ry + Su
+\nonumber =& Q\chi + Ry + Su & \blacksquare
 \end{align}
 
 Neste trabalho, consideramos o sistema:
-
+%
 \begin{align}
 \label{eq:planta2}
 \dot{x}_1 &= x_2 - a_1y\\
 \nonumber \dot{x}_2 &= k_p\,u - a_0y
 \end{align}
-
-onde os parâmetros $a_1$, $a_0$ e $k_p$ são desconehcidos. Para esta formulação
-apenas a saída do sistema $y$ está disponível, portanto $x_2$ não é conhecido e
-deve ser estimado. Podemos reescrever o sistema \ref{eq:planta2}:
-
-\begin{align}
-\nonumber \dot{x} &= Ax - F(y,u)^\intercal\theta \\
-A &= 
-\begin{bmatrix}
-0 & 1\\
-0 & 0
-\end{bmatrix}, F(y,u)^\intercal = 
-\nonumber \begin{bmatrix}
-B(u) & \Phi(y)
-\end{bmatrix}, \Phi(y) = 
-\begin{bmatrix}
--y & 0\\
-0 & -y
-\end{bmatrix}, B(u) = 
-\begin{bmatrix}
-0\\
-u
-\end{bmatrix}, \theta =
-\begin{bmatrix}
-k_p \\
-a_1 \\
-a_0
-\end{bmatrix} \\
-\nonumber y &= e_1^\intercal x \\
-\nonumber e_1 &= 
-\begin{bmatrix}
-1 \\
-0
-\end{bmatrix} \\
-\end{align}
-
+%
+onde o vetor de parâmetros $\theta^{\intercal} = \mat{a_1 \,\, a_0 \,\, k_p}$ é desconhecido. Para esta formulação
+apenas a saída do sistema $y$ está disponível, logo $x_2$ não é conhecido e
+deve ser estimado. Podemos reescrever o sistema \eqref{eq:planta2}:
+%
+\begin{gather}
+\dot{x} = Ax + F(y,u)^\intercal\theta \\ \nonumber
+A = \mat{0 & 1 \\ 0 & 0} ,\enskip
+%
+F(y,u)^\intercal = \mat{B(u) & \Phi(y)} ,\enskip
+%
+\Phi(y) = \mat{-y & 0 \\ 0 & -y} ,\enskip
+%
+B(u) = \mat{0 \\ u} ,\enskip
+%
+\theta = \mat{k_p \\ a_1 \\ a_0} ,\enskip
+%
+y = e_1^\intercal x ,
+\end{gather}
+%
+em que $e_1^\intercal = \mat{1 & 0}$.
+%
 No trabalho 7, para estimar os estados, utilizamos os filtros abaixo:
-
+%
 \begin{align}
 \label{eq:filtros2}
 \dot{\xi} &= A_0\xi + ky \\
-\nonumber \dot{\Omega}^\intercal &= A_0\Omega^\intercal + F^\intercal\\
-\nonumber k &=
-\begin{bmatrix}
-k_1\\k_2
-\end{bmatrix}, A_0 = A - ke_1^\intercal =  
-\begin{bmatrix}
--k_1 & 1\\-k_2 & 0
-\end{bmatrix}
+\nonumber \dot{\Omega}^\intercal &= A_0\Omega^\intercal + F^\intercal
 \end{align}
+%
+\begin{equation*}
+k^\intercal = \mat{k_1 & k_2} \qquad A_0 = A - ke_1^\intercal =  \mat{-k_1 & 1\\-k_2 & 0}
+\end{equation*}
 
 Os valores de $k$ devem ser escolhidos de forma que $A_0$ seja Hurwitz. E, dessa
-forma, o estado estimado pode ser escrito como:
-
+forma, o estado estimado é escrito como:
+%
 \begin{align}
-\hat{x} = \xi + \Omega^\intercal\theta
+\hat{x} = \xi + \Omega^\intercal\theta \,,
 \label{eq:estimador}
 \end{align}
-
-Como no trabalho 7, verifica-se que a dinâmica do estimador é igual à
-dinâmica da planta \ref{eq:planta2}.
+%
+e como no trabalho 7, verifica-se que a dinâmica do estimador é igual à
+dinâmica da planta \eqref{eq:planta2}.
 
 Para o caso do observador de ordem reduzida, define-se:
-
+%
 \begin{align}
 \chi = x_2 + Ny
 \end{align}
 
 E derivando, obtemos:
-
+%
 \begin{align}
 \dot{\chi} &= (-a_0y + k_pu) + N(x_2-a_1y) \\
 \nonumber &= Nx_2 - (a_0 + Na_1)y + k_pu \\
-\nonumber &= N(\chi - Ny) - (a_0 + a_1)y + k_pu\\
-\nonumber &= N\chi - N^2y + F^\intercal\theta\\
-\nonumber F^\intercal &= \left[u \quad -Ny \quad -y\right], \theta =
-\left[k_p \quad a_1 \quad a_0\right]^\intercal
+\nonumber &= N(\chi - Ny) - (a_0 + Na_1)y + k_pu\\
+\nonumber &= N\chi - N^2y + F^\intercal\theta \,,\\[8pt]
+\nonumber F^\intercal &= \left[u \enskip -Ny \enskip -y\right]
 \end{align}
 
 Para o sistema de ordem reduzida, os filtros são:
-
+%
 \begin{align}
-\label{eq:filtros3}
-\dot{\xi} &= N\xi - N^2y \\
-\nonumber \dot{\Omega}^\intercal &= N\Omega^\intercal + F^\intercal\\
+\dot{\xi} &= N\xi - N^2y \nonumber \\
+\label{eq:filtros3} \dot{\Omega}^\intercal &= N\Omega^\intercal + F^\intercal\\
 \nonumber & N < 0
 \end{align}
 
-E o estado estimado será:
-
+Com isso, o estado estimado será:
+%
 \begin{align}
-\hat{\chi} &= \xi + \Omega^\intercal\theta \\
-\dot{\hat{\chi}} &= \dot{\xi} + \Omega^\intercal\theta \\
+\hat{\chi} &= \xi + \Omega^\intercal\theta
+\label{eq:chi}
+\end{align}
+
+Para verificar, obtemos a derivada de $\hat{\chi}$: 
+%
+\begin{align}
+\dot{\hat{\chi}} &= \dot{\xi} + \dot{\Omega}^\intercal\theta \nonumber \\
 \nonumber &= (N\xi - N^2y) + (N\Omega^\intercal + F^\intercal)\theta \\
 \nonumber &= N(\xi+\Omega^\intercal\theta) - N^2y + F^\intercal\theta \\
 \dot{\hat{\chi}} &= N\hat{\chi}-N^2y+F^\intercal\theta
 \end{align}
 
 Porém, $\Omega$ é uma matriz e opta-se pela redução das ordens dos
-filtros. Observe que $\Omega^\intercal = \left[v_0 \quad | \quad \Xi\right]$ e,
-pela equação ~\ref{eq:filtros3}, temos que:
-
+filtros. Observe que $\Omega^\intercal = \mat{v_0 & | & \Xi}$ e,
+pela equação \eqref{eq:filtros3}, temos que:
+%
 \begin{align}
 \dot{v}_0 &= Nv_0 + u \\
 \label{eq:dotXi}
-\dot{\Xi} &= N\Xi + 
-\begin{bmatrix}
--N & -1
-\end{bmatrix}
-y
+\dot{\Xi} &= N\Xi + \mat{-N & -1}y
 \end{align}
 
 Introduzem-se dois novos filtros, para substituir os filtros da
-equação~\ref{eq:filtros3}:
-
+equação \eqref{eq:filtros3}:
+%
 \begin{align}
 \dot{\lambda} &= N\lambda + u \\
 \dot{\eta} &= N\eta + y
@@ -187,109 +169,139 @@ equação~\ref{eq:filtros3}:
 
 É fácil verificar que, para esta planta de segunda ordem sem zeros ($m=0$), $v_0
 = \lambda$. 
-
-Agora vamos demonstrar que:
+%
+Agora, vamos demonstrar que:
+%
 \begin{align}\label{eq:Xi}
-\Xi &= -\left[N\eta \quad \eta\right]
+\Xi &= -\mat{N\eta & \eta}
 \end{align}
 
-Derivando \ref{eq:Xi}, temos:
-
+Derivando \eqref{eq:Xi}, temos:
+%
 \begin{align*}
-\dot{\Xi} &= -\left[N\dot{\eta} \quad \dot{\eta}\right] \\
-&= -\left[N^2\eta + Ny \quad N\eta + y\right]\\
-& = -N\left[N\eta \quad \eta\right] + \left[-N \quad -1\right]y\\
-& = N\Xi + \left[-N \quad -1\right]y
+\dot{\Xi} &= -\mat{N\dot{\eta} & \dot{\eta}} \\
+&= -\mat{N^2\eta + Ny & N\eta + y}\\
+& = -N\mat{N\eta & \eta} + \mat{-N & -1}y\\
+& = N\Xi + \mat{-N & -1}y \,,
 \end{align*}
-
-E assim chegamos na equação \ref{eq:dotXi}. Também temos a relação: 
-
+%
+e assim chegamos na equação \eqref{eq:dotXi}. Também temos a relação: 
+%
 \begin{align}\label{eq:xi}
 \xi &= -N^2\eta
 \end{align}
 
-Derivando a equação \ref{eq:xi}, obtemos:
+Derivando a equação \eqref{eq:xi}, obtemos:
+%
 \begin{align*}
 \dot{\xi} &= -N^2(N\eta + y)\\
-&= N(-N^2\eta - y) = N\xi - N^2y 
+&= N(-N^2\eta - y) = N\xi - N^2y \,,
 \end{align*}
-
-E assim chegamos na equação \ref{eq:filtros3}. O projeto backstepping agora
+%
+e assim chegamos na equação \eqref{eq:filtros3}. O projeto backstepping agora
 segue como no trabalho anterior. Primeiro, fazemos a mudança de coordenadas em
-\textbf{z}:
-
+$\mathbf{z}$:
+%
 \begin{align}
 z_1 &= y - y_r \\
-\nonumber z_2 &= v_0 - \alpha_{1} - \hat{\rho}\dot{y_r}
+\nonumber z_2 &= v_0 - \alpha_{1} - \hat{\rho}\dot{y_r} \,,
 \end{align}
-
+%
 onde $\rho$ é estimativa de $\frac{1}{k_p}$. O controle virtual $\alpha_1$, a
 lei de controle $u$ e as leis de adaptação $\dot{\theta}$ e $\dot{\rho}$ são
-obtidas pelo método de Lyapunov. Derivando $z_1$, obtemos:
+obtidas pelo método de Lyapunov. Note que os estados são:
+%
+\begin{align*}
+ x_1 &= y \\
+ x_2 &= \chi - Ny
+\end{align*}
 
+Pelo modelo da planta em \eqref{eq:planta}, temos:
+%
+\begin{equation*}
+ \dot{y} = \chi -Ny - e_1^\intercal a y \,.
+\end{equation*}
+
+Definindo $\epsilon = \chi - \hat{\chi}$ e aplicando \eqref{eq:chi}, encontramos:
+%
+\begin{equation*}
+ \dot{y} = \xi + \Omega^\intercal \theta + \epsilon -Ny - e_1^\intercal a y \,.
+\end{equation*}
+
+Agora, expandindo $\Omega^\intercal = \mat{v_0 & | & \Xi}$ e definindo $\omega^\intercal = \mat{v_0 & \left(\Xi - ye_1^\intercal \right)}$ e $\bar{\omega}^\intercal = \mat{0 & \left(\Xi - ye_1^\intercal \right)}$, obtemos:
+%
+\begin{align*}
+ \dot{y} &= \xi + \omega^\intercal \theta +\epsilon \,\, \HI{-Ny} \,,\\
+ \dot{y} &= \xi + \bar{\omega}^\intercal \theta + \epsilon \,\, \HI{-Ny} + k_p v_0 \,.
+\end{align*}
+
+Note a presença do termo $-Ny$, que não aparecia no observador de ordem completa. Do mesmo modo que no método com observador completo, derivando $z_1 = y - y_r$, tem-se:
+%
 \begin{align}
 \dot{z}_1 &= k_p\alpha_1 + \xi + \bar{\omega}^\intercal\theta + \epsilon -
 k_p\tilde{\rho}\dot{y}_r + k_pz_2 - Ny \\
 \alpha_1 &= \hat{\rho}\bar{\alpha}_1\\
-\dot{z}_1 &= \bar{\alpha}_1 + \xi_2 + \bar{\omega}^\intercal\theta + \epsilon_2
-- k_p(\dot{y}_r + \bar{\alpha}_1)\tilde{\rho} + k_pz_2 - Ny
+\dot{z}_1 &= \bar{\alpha}_1 + \xi + \bar{\omega}^\intercal\theta + \epsilon
+- k_p(\dot{y}_r + \bar{\alpha}_1)\tilde{\rho} + k_pz_2 \,\, \HI{-Ny}
 \end{align}
 
 E escolhemos a primeira função estabilizante:
+%
 \begin{align}
-\bar{\alpha}_1 = -c_1z_1-d_1z_1-\xi_2-\bar{\omega}^\intercal\hat{\theta} + Ny
+\bar{\alpha}_1 = -c_1z_1-d_1z_1-\xi-\bar{\omega}^\intercal\hat{\theta} \,\, \HI{+Ny}
 \end{align}
 
 A dinâmica de $z_1$ pode ser reescrita como:
+%
 \begin{align}
 \dot{z}_1 =
--c_1z_1-d_1z_1+\epsilon_2+\left[\omega-\hat{\rho}(\dot{y}_r
+-c_1z_1-d_1z_1+\epsilon+\left[\omega-\hat{\rho}(\dot{y}_r
 + \bar{\alpha}_1)e_1\right]^\intercal\tilde{\theta} -
 k_p(\dot{y}_r+\bar{\alpha}_1)\tilde{\rho} + \hat{k}_pz_2
 \end{align}
 
 Escolhe-se a função de Lyapunov:
-
+%
 \begin{align}
 2V_1 = z_1^2 +
 \tilde{\theta}^\intercal\Gamma^{-1}\tilde{\theta}+|k_p|\gamma^{-1}\tilde{\rho}^2
 + \frac{1}{2d_1}\epsilon^\intercal P\epsilon
 \end{align}
 
-Nessas condições, é possível que a atualização de $\hat{\rho}$ é dada pela
-equação:
-
+Nessas condições, é possível escolher a atualização de $\hat{\rho}$ segundo:
+%
 \begin{align}
-\hat{\rho} &= -\gamma z_1 \text{sign}(k_p)(\dot{y}_r + \bar{\alpha}_1)
+\dot{\hat{\rho}} &= -\gamma z_1 \text{sign}(k_p)(\dot{y}_r + \bar{\alpha}_1)
 \end{align}
 
 Derivando $z_2$, obtemos:
-
+%
 \begin{align}
-\dot{z}_2 &= \dot{v} - \hat{\rho}\ddot{y}_r - \dot{\hat{\rho}}\dot{y}_r -
+\dot{z}_2 &= \dot{v}_0 - \hat{\rho}\ddot{y}_r - \dot{\hat{\rho}}\dot{y}_r -
 \dot{\alpha}_1 \\
-&= u - Nv - \hat{\rho}\ddot{y}_r - \beta -
-\frac{\partial\alpha_1}{\partial y}(\omega^\intercal\tilde{\omega} + \epsilon_2)
+&= u - \hat{\rho}\ddot{y}_r - \beta -
+\frac{\partial\alpha_1}{\partial y}(\omega^\intercal\tilde{\theta} + \epsilon)
 - \frac{\partial\alpha_1}{\partial\hat{\theta}}\dot{\hat{\theta}} \\
-\beta &= Nv + \frac{\partial\alpha_1}{\partial y}(\xi +
+\beta &= -Nv_0 + \frac{\partial\alpha_1}{\partial y}(\xi +
 \omega^\intercal\hat{\theta} - Ny) + \frac{\partial \alpha_1}{\partial \eta}
-(A_0\eta + e_2y) + \frac{\partial \alpha_1}{\partial y_r} \dot{y}_r +
+(N\eta + y) + \frac{\partial \alpha_1}{\partial y_r} \dot{y}_r +
 (\dot{y}_r + \frac{\partial \alpha_1}{\partial \hat{\rho}})\dot{\hat{\rho}}
 \end{align}
 
 Escolhe-se a função de Lyapunov:
-
+%
 \begin{align}
 V_2 = V_1 + \frac{1}{2}z_2^2 + \frac{1}{4d_2}\epsilon^\intercal P\epsilon
 \end{align}
 
 É possível mostrar que a atualização de parâmetros e a lei de controle são:
-
+%
 \begin{align}
-\hat{\theta} &= \Gamma\tau_2 \\
+\dot{\hat{\rho}} &= -\gamma z_1 \text{sign}(k_p)(\dot{y}_r + \bar{\alpha}_1) \\
 \tau_1 &= (\omega - \hat{\rho}(\dot{y}_r + \bar{\alpha}_1)e_1)z_1 \\
 \tau_2 &= \tau_1 - z_2 \frac{\partial \alpha_1}{\partial y} \omega \\
+\dot{\hat{\theta}} &= \Gamma\tau_2 \\
 u &= -c_2z_2 + \beta + \hat{\rho}\ddot{y}_r + \frac{\partial \alpha_1}{\partial
-\hat{\theta}}\hat{\theta} - d_2z_2\left( \frac{\partial \alpha_1}{\partial
+\hat{\theta}} \Gamma \tau_2 - d_2z_2\left( \frac{\partial \alpha_1}{\partial
 y}\right)^2 - \hat{k}_pz_1
 \end{align}
