@@ -1,8 +1,7 @@
 clear;
 clc;
 close all;
-
-global A B thetas N c1 c2 d1 d2 Gamma gamma kp a w e1;
+global A a w e1 e2;
 
 PRINT = true;
 % PRINT = false;
@@ -12,9 +11,14 @@ tfinal = 60;
 
 % Unit vectors
 e1 = [1 0]';
+e2 = [0 1]';
 
 % System matrix
 A = [0 1;0 0];
+
+%Reference
+a = [1 1];
+w = [1 3];
 
 %% First parameters
 
@@ -25,18 +29,15 @@ thetas_1 = [kp_1 P_1(2) P_1(3)]';
 
 N_1 = -1;
 
-a_1 = [1 1];
-w_1 = [1 3];
-
 %Initial conditions
-y0_1  = [0 0]';
+X0_1  = [0 0]';
 theta0_1 = [1 0 0]';
-eta0_1 = [0]';
 lambda0_1 = [0]';
+eta0_1 = [0]';
 rho0_1 = 1;
 
 %Adaptation gain
-Gamma_1 = 10*eye(3);
+Gamma_1 = 10;
 gamma_1 = 10;
 c1_1 = 1;
 c2_1 = 1;
@@ -52,18 +53,15 @@ thetas_2 = [kp_2 P_2(2) P_2(3)]';
 
 N_2 = -1;
 
-a_2 = [1 1];
-w_2 = [1 3];
-
 %Initial conditions
 y0_2  = [0 0]';
 theta0_2 = [1 1 1]';
-eta0_2 = [0]';
 lambda0_2 = [0]';
+eta0_2 = [0]';
 rho0_2 = 1;
 
 %Adaptation gain
-Gamma_2 = 10*eye(3);
+Gamma_2 = 10;
 gamma_2 = 10;
 c1_2 = 1;
 c2_2 = 1;

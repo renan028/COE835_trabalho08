@@ -12,64 +12,66 @@
 
 function dx = backstepping_red(t,x)
 
-global A B thetas N c1 c2 d1 d2 Gamma gamma kp a w e1;
+global A thetas N c1 c2 d1 d2 Gamma gamma kp a w e1 e2;
 
-y           = x(1:2);
+X           = x(1:2); y = e1'*X;
 theta       = x(3:5);
 lambda      = x(6);
 eta         = x(7);
 rho         = x(8);
 
 %% Input
-yr = a(1) * sin(w(1)*t) + a(2) * sin(w(2)*t);
-dyr = a(1) * w(1) * cos(w(1)*t) + a(2) * w(2) * cos(w(2)*t);
-ddyr = -a(1) * w(1)^2 * sin(w(1)*t) - a(2) * w(2)^2 * sin(w(2)*t);
+yr=0; dyr=0; ddyr=0;
+for i=1:length(a)
+    yr = yr + a(i)*sin(w(i)*t);
+    dyr = dyr + w(i)*a(i)*cos(w(i)*t);
+    ddyr = ddyr - w(i)^2*a(i)*sin(w(i)*t);
+end
 
-Phi = [-y(1) 0;0 -y(1)];
+Phi = [-y 0;0 -y];
 
 %% Variables 1
 xi = -N^2 * eta;
 Xi = -[N*eta eta];
-v1 = lambda(1);
-omega_bar = [0, (Xi - y(1)*e1')]';
-omega = [v1, (Xi - y(1)*e1')]';
+v0 = lambda(1);
+omega_bar = [0, (Xi - y*e1')]';
+omega = [v0, (Xi - y*e1')]';
+
 
 %% Z
-z1 = y(1) - yr;
-alpha_bar = -c1*z1 - d1*z1 - xi - omega_bar'*theta + N*y(1);
+z1 = y - yr;
+alpha_bar = -c1*z1 - d1*z1 - xi - omega_bar'*theta + N*y;
 alpha_1 = rho * alpha_bar;
-z2 = v1 - rho*dyr - alpha_1;
+z2 = v0 - rho*dyr - alpha_1;
 
 %% Filtro eta
-deta = N*eta + y(1);
+deta = N*eta + y;
 
 %% dalpha/dt
-dady = rho * (- c1 - d1 + [0,e1']*theta + N); 
+dady = rho * (- c1 - d1 + [0,e1']*theta + N);
 dadeta_deta = rho * (N^2 * deta + [0, N*deta, deta]*theta);
 dadyr = rho*(c1 + d1);
 dadtheta = - rho * omega_bar';
-dadrho = -(c1 + d1)*(y(1) - yr) - xi - omega_bar'*theta + N*y(1);
-
+dadrho = -(c1 + d1)*(y - yr) - xi - omega_bar'*theta + N*y;
 
 %% Variables 2
 tau_1 = (omega - rho*(dyr + alpha_bar)*[e1',0]')*z1;
 tau_2 = tau_1 - z2 * (dady * omega); 
 
-%% Atualização dos parâmetros
+%% Atualizaï¿½ï¿½o dos parï¿½metros
 dtheta = Gamma * tau_2;
 drho = - gamma * z1 * sign(kp) * (dyr + alpha_bar);
-beta = dady * (xi + omega'*theta - N*y(1)) + ...
+beta = -N*v0 + dady * (xi + omega'*theta - N*y) + ...
     dadeta_deta + dadyr * dyr + (dyr + dadrho) * drho;
-u = -N*v1 -c2*z2 + beta + rho*ddyr + dadtheta*dtheta - d2*z2*(dady)^2 - ...
+u = -c2*z2 + beta + rho*ddyr + dadtheta*dtheta - d2*z2*(dady)^2 - ...
     theta(1)*z1;
 
 %% Filtros
 dlambda = N*lambda + u;
 
-
 %% Planta
-F = [[0 1]'*u Phi];
-dy = A*y + F*thetas;
+F = [e2*u Phi];
+dX = A*X + F*thetas;
 
 %% Translation
-dx = [dy' dtheta' dlambda' deta' drho]';    
+dx = [dX' dtheta' dlambda' deta' drho]';    

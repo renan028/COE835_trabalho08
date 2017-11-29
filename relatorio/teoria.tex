@@ -298,7 +298,7 @@ V_2 = V_1 + \frac{1}{2}z_2^2 + \frac{1}{4d_2}\epsilon^\intercal P\epsilon
 %
 \begin{align}
 \dot{\hat{\rho}} &= -\gamma z_1 \text{sign}(k_p)(\dot{y}_r + \bar{\alpha}_1) \\
-\tau_1 &= (\omega - \hat{\rho}(\dot{y}_r + \bar{\alpha}_1)e_1)z_1 \\
+\tau_1 &= (\omega - \hat{\rho}(\dot{y}_r + \bar{\alpha}_1)\mat{e_1^\intercal & 0}^\intercal)z_1 \\
 \tau_2 &= \tau_1 - z_2 \frac{\partial \alpha_1}{\partial y} \omega \\
 \dot{\hat{\theta}} &= \Gamma\tau_2 \\
 u &= -c_2z_2 + \beta + \hat{\rho}\ddot{y}_r + \frac{\partial \alpha_1}{\partial
