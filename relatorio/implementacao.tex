@@ -12,7 +12,14 @@ Temos ainda que $\alpha =
 \begin{align}
 \frac{\partial \alpha_1}{\partial y} &= -\hat{\rho}(c_1 + d_1 +
 \mat{0 & -e_1^\intercal}\hat{\theta} - N)\\
+%
 \frac{\partial \alpha_1}{\partial \eta} &= \hat{\rho} N^2 \\
+%
+\frac{\partial \alpha_1}{\partial \eta}\frac{\text{d}\eta}{\text{d}t} &=
+\hat{\rho}\left(N^2\frac{\text{d}\eta}{\text{d}t} +
+\left[0 \quad N\frac{\text{d}\eta}{\text{d}t}
+\quad \frac{\text{d}\eta}{\text{d}t}\right]\hat{\theta}\right) \\
+%
 \frac{\partial \alpha_1}{\partial y_r} &= \hat{\rho}(c_1 + d_1)\\
 \frac{\partial \alpha_1}{\partial \hat{\theta}} &= - \hat{\rho}\bar{\omega}^\intercal \\
 \frac{\partial \alpha_1}{\partial \hat{\rho}} &= -(c_1+d_1)(y-y_r) +

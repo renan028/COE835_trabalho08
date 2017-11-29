@@ -21,7 +21,6 @@ P = P_1;
 
 thetas = thetas_1;
 
-
 N = N_1;
 
 a = a_1;
@@ -63,14 +62,14 @@ e0_1 =  y_1 - r_1;
 % thetas = thetas_1;
 % 
 % 
-% N = N_2;
+% N = N_1;
 % 
 % a = a_1;
 % w = w_1;
-% c1 = c1_2;
-% c2 = c2_2;
-% d1 = d1_2;
-% d2 = d2_2;
+% c1 = c1_1;
+% c2 = c2_1;
+% d1 = d1_1;
+% d2 = d2_1;
 % Gamma = Gamma_2;
 % gamma = gamma_2;
 % 
@@ -105,8 +104,7 @@ e0_1 =  y_1 - r_1;
 % thetas = thetas_2;
 % 
 % 
-% N = N_2;
-% A0 = A - k*e1';
+% N = N_1;
 % 
 % a = a_1;
 % w = w_1;
@@ -148,8 +146,7 @@ e0_1 =  y_1 - r_1;
 % thetas = thetas_1;
 % 
 % 
-% N = N_2;
-% A0 = A - k*e1';
+% N = N_1;
 % 
 % a = a_2;
 % w = w_2;
@@ -192,7 +189,6 @@ thetas = thetas_1;
 
 
 N = N_2;
-% A0 = A - k*e1';
 
 a = a_1;
 w = w_1;
