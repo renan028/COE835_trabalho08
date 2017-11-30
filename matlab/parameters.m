@@ -1,13 +1,13 @@
 clear;
 clc;
 close all;
-global A a w e1 e2;
+global A e1 e2;
 
 PRINT = true;
-% PRINT = false;
+%PRINT = false;
 
 %Simulation time
-tfinal = 60;
+tfinal = 100;
 
 % Unit vectors
 e1 = [1 0]';
@@ -15,10 +15,6 @@ e2 = [0 1]';
 
 % System matrix
 A = [0 1;0 0];
-
-%Reference
-a = [1 1];
-w = [1 3];
 
 %% First parameters
 
@@ -31,39 +27,47 @@ N_1 = -1;
 
 %Initial conditions
 X0_1  = [0 0]';
-theta0_1 = [1 0 0]';
+theta0_1 = [0 0 0]';
 lambda0_1 = [0]';
 eta0_1 = [0]';
 rho0_1 = 1;
 
 %Adaptation gain
-Gamma_1 = 10;
-gamma_1 = 10;
+Gamma_1 = 1;
+gamma_1 = 1;
 c1_1 = 1;
 c2_1 = 1;
 d1_1 = 1;
 d2_1 = 1;
 
+%Reference
+a_1 = [1 1];
+w_1 = [1 3];
+
 %% Second parameters
 
-kp_2 = 5;
+kp_2 = 2;
 Z_2 = [1];
-P_2 = [1 2 1];
+P_2 = [1 -2 1];
 thetas_2 = [kp_2 P_2(2) P_2(3)]';
 
 N_2 = -1;
 
 %Initial conditions
-y0_2  = [0 0]';
-theta0_2 = [1 1 1]';
+X0_2  = [10 0]';
+theta0_2 = [0 0 0]';
 lambda0_2 = [0]';
 eta0_2 = [0]';
 rho0_2 = 1;
 
 %Adaptation gain
 Gamma_2 = 10;
-gamma_2 = 10;
+gamma_2 = 1;
 c1_2 = 1;
 c2_2 = 1;
 d1_2 = 1;
 d2_2 = 1;
+
+%Reference
+a_2 = [1 2];
+w_2 = [1 5];

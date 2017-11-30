@@ -21,14 +21,9 @@ eta         = x(7);
 rho         = x(8);
 
 %% Input
-yr=0; dyr=0; ddyr=0;
-for i=1:length(a)
-    yr = yr + a(i)*sin(w(i)*t);
-    dyr = dyr + w(i)*a(i)*cos(w(i)*t);
-    ddyr = ddyr - w(i)^2*a(i)*sin(w(i)*t);
-end
-
-Phi = [-y 0;0 -y];
+yr = sum(a.*sin(w*t));
+dyr = sum(a.*w.*cos(w*t));
+ddyr = sum(-a.*w.*w.*sin(w*t));
 
 %% Variables 1
 xi = -N^2 * eta;
@@ -36,7 +31,6 @@ Xi = -[N*eta eta];
 v0 = lambda(1);
 omega_bar = [0, (Xi - y*e1')]';
 omega = [v0, (Xi - y*e1')]';
-
 
 %% Z
 z1 = y - yr;
@@ -63,13 +57,13 @@ dtheta = Gamma * tau_2;
 drho = - gamma * z1 * sign(kp) * (dyr + alpha_bar);
 beta = -N*v0 + dady * (xi + omega'*theta - N*y) + ...
     dadeta_deta + dadyr * dyr + (dyr + dadrho) * drho;
-u = -c2*z2 + beta + rho*ddyr + dadtheta*dtheta - d2*z2*(dady)^2 - ...
-    theta(1)*z1;
+u = -c2*z2 + beta + rho*ddyr + dadtheta*dtheta - d2*z2*(dady)^2 - theta(1)*z1;
 
 %% Filtros
 dlambda = N*lambda + u;
 
 %% Planta
+Phi = [-y 0;0 -y];
 F = [e2*u Phi];
 dX = A*X + F*thetas;
 
